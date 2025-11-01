@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "453393533989",
+    "project_id": "edtech-chat-34156",
+    "storage_bucket": "edtech-chat-34156.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:453393533989:android:1bf2a488aeaf889b5783cc",
+        "android_client_info": {
+          "package_name": "com.example.edtech_chat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJolD3q_AwnmSZj945MMxeWQf4ttvEoiw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
