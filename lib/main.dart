@@ -1,5 +1,3 @@
-import 'package:edtech_chat/core/constants/color_theme.dart';
-import 'package:edtech_chat/data/datasources/local_isar_service.dart';
 import 'package:edtech_chat/presentation/controllers/auth_controller.dart';
 import 'package:edtech_chat/presentation/views/room_list_view.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +11,6 @@ import 'presentation/controllers/chat_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await LocalIsarService.init();
-
   await Firebase.initializeApp();
   Get.put(ChatController());
   Get.put(AuthController());

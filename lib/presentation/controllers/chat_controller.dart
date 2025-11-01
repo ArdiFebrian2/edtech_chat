@@ -9,7 +9,7 @@ class ChatController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   var messages = <MessageEntity>[].obs;
-  var currentUserName = ''.obs; // ✅ simpan nama user yang sedang login
+  var currentUserName = ''.obs;
   String currentUserId = '';
   final Map<String, Map<String, dynamic>> _userCache = {};
 
@@ -19,7 +19,6 @@ class ChatController extends GetxController {
     _loadCurrentUserInfo();
   }
 
-  /// 🔹 Ambil data user yang sedang login dari Firestore
   Future<void> _loadCurrentUserInfo() async {
     final user = _auth.currentUser;
     if (user != null) {
@@ -27,14 +26,14 @@ class ChatController extends GetxController {
 
       final doc = await _firestore.collection('users').doc(user.uid).get();
       if (doc.exists) {
-        currentUserName.value = doc['name'] ?? user.email?.split('@').first ?? 'Unknown';
+        currentUserName.value =
+            doc['name'] ?? user.email?.split('@').first ?? 'Unknown';
       } else {
         currentUserName.value = user.email?.split('@').first ?? 'Unknown';
       }
     }
   }
 
-  /// 🔹 Listen to messages in a room (real-time)
   void listenToMessages(String roomId) {
     _firestore
         .collection('rooms')
@@ -43,30 +42,30 @@ class ChatController extends GetxController {
         .orderBy('createdAt', descending: true)
         .snapshots()
         .listen((snapshot) {
-      messages.value = snapshot.docs.map((doc) {
-        final data = doc.data();
-        _userCache[data['authorId']] = {
-          'name': data['authorName'] ?? 'Unknown',
-          'photo': data['authorPhoto'] ?? '',
-          'role': data['authorRole'] ?? 'student',
-        };
+          messages.value = snapshot.docs.map((doc) {
+            final data = doc.data();
 
-        return MessageEntity(
-          id: doc.id,
-          roomId: roomId,
-          authorId: data['authorId'],
-          authorName: data['authorName'] ?? 'Unknown',
-          authorRole: data['authorRole'] ?? 'student',
-          authorPhoto: data['authorPhoto'] ?? '',
-          text: data['text'],
-          createdAt: (data['createdAt'] as Timestamp).toDate(),
-          type: data['type'],
-        );
-      }).toList();
-    });
+            _userCache[data['authorId']] = {
+              'name': data['authorName'] ?? 'Unknown',
+              'role': data['authorRole'] ?? 'student',
+            };
+
+            return MessageEntity(
+              id: doc.id,
+              roomId: roomId,
+              authorId: data['authorId'],
+              authorName: data['authorName'] ?? 'Unknown',
+              authorRole: data['authorRole'] ?? 'student',
+              text: data['text'],
+              createdAt: data['createdAt'] != null
+                  ? (data['createdAt'] as Timestamp).toDate()
+                  : DateTime.now(),
+              type: data['type'],
+            );
+          }).toList();
+        });
   }
 
-  /// 🔹 Kirim pesan ke Firestore
   Future<void> sendMessage(
     String roomId,
     String authorId,
@@ -81,17 +80,15 @@ class ChatController extends GetxController {
         .doc(roomId)
         .collection('messages')
         .add({
-      'authorId': authorId,
-      'authorName': authorName, // dikirim dari parameter
-      'authorRole': userData['role'] ?? 'student',
-      'authorPhoto': userData['photoUrl'] ?? '',
-      'text': text,
-      'createdAt': FieldValue.serverTimestamp(),
-      'type': 'text',
-    });
+          'authorId': authorId,
+          'authorName': authorName,
+          'authorRole': userData['role'] ?? 'student',
+          'text': text,
+          'createdAt': FieldValue.serverTimestamp(),
+          'type': 'text',
+        });
   }
 
-  /// 🔹 Stream daftar room user
   Stream<List<RoomEntity>> getRoomsStream(String uid) {
     return _firestore
         .collection('rooms')
@@ -108,17 +105,16 @@ class ChatController extends GetxController {
               createdAt: (data['createdAt'] is Timestamp)
                   ? (data['createdAt'] as Timestamp).toDate()
                   : DateTime.now(),
+              createdBy: '',
             );
           }).toList(),
         );
   }
 
-  /// 🔹 Resolve user info (cache)
   Map<String, dynamic>? resolveUser(String userId) {
     return _userCache[userId];
   }
 
-  /// 🔹 Buat room trio (Student + Parent + Tutor)
   Future<void> createTrioRoom(String userId) async {
     try {
       print('🔹 [DEBUG] Creating trio room for $userId');
@@ -178,7 +174,7 @@ class ChatController extends GetxController {
           "Info",
           "Trio room already exists for this student, tutor, and parent.",
         );
-        print('⚠️ [DEBUG] Trio room already exists.');
+        print('Trio room already exists.');
         return;
       }
 
@@ -201,19 +197,16 @@ class ChatController extends GetxController {
             'id': userId,
             'name': userData['name'] ?? userData['email'] ?? 'Student',
             'role': role,
-            'photoUrl': userData['photoUrl'] ?? '',
           },
           {
             'id': parentId,
             'name': parentData['name'] ?? parentData['email'] ?? 'Parent',
             'role': parentData['role'] ?? 'parent',
-            'photoUrl': parentData['photoUrl'] ?? '',
           },
           {
             'id': tutorId,
             'name': tutorData['name'] ?? tutorData['email'] ?? 'Tutor',
             'role': tutorData['role'] ?? 'tutor',
-            'photoUrl': tutorData['photoUrl'] ?? '',
           },
         ],
         'memberIds': [userId, parentId, tutorId],
@@ -222,10 +215,10 @@ class ChatController extends GetxController {
 
       await _firestore.collection('rooms').add(roomData);
 
-      print('✅ [DEBUG] Trio room created successfully!');
+      print('Trio room created successfully!');
       Get.snackbar("Success", "Trio room created successfully!");
     } catch (e, stack) {
-      print('❌ [ERROR] Failed to create trio room: $e');
+      print('Failed to create trio room: $e');
       print(stack);
       Get.snackbar("Error", e.toString());
     }

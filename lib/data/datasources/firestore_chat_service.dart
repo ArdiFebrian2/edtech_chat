@@ -6,7 +6,6 @@ import '../models/room_model.dart';
 class FirebaseChatService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  /// 🔹 Listen to real-time messages in a room
   Stream<List<MessageEntity>> listenMessages(String roomId) {
     return _firestore
         .collection('rooms')
@@ -23,32 +22,37 @@ class FirebaseChatService {
               authorId: data['authorId'] ?? '',
               authorName: data['authorName'] ?? 'Unknown',
               authorRole: data['authorRole'] ?? 'student',
-              authorPhoto: data['authorPhoto'] ?? '',
               text: data['text'] ?? '',
-              createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
+              createdAt:
+                  (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
               type: data['type'] ?? 'text',
             );
           }).toList(),
         );
   }
 
-  /// 🔹 Send message (ambil data user langsung dari Firestore)
   Future<void> sendMessage(String roomId, MessageEntity message) async {
-    final userDoc = await _firestore.collection('users').doc(message.authorId).get();
+    final userDoc = await _firestore
+        .collection('users')
+        .doc(message.authorId)
+        .get();
     final userData = userDoc.data() ?? {};
 
-    await _firestore.collection('rooms').doc(roomId).collection('messages').add({
-      'authorId': message.authorId,
-      'authorName': userData['name'] ?? 'Unknown',
-      'authorRole': userData['role'] ?? 'student',
-      'authorPhoto': userData['photoUrl'] ?? '',
-      'text': message.text,
-      'createdAt': message.createdAt,
-      'type': message.type,
-    });
+    await _firestore
+        .collection('rooms')
+        .doc(roomId)
+        .collection('messages')
+        .add({
+          'authorId': message.authorId,
+          'authorName': userData['name'] ?? 'Unknown',
+          'authorRole': userData['role'] ?? 'student',
+          'authorPhoto': userData['photoUrl'] ?? '',
+          'text': message.text,
+          'createdAt': message.createdAt,
+          'type': message.type,
+        });
   }
 
-  /// 🔹 Stream all rooms where user is a member
   Stream<List<RoomModel>> getRooms(String uid) {
     return _firestore
         .collection('rooms')
@@ -61,7 +65,6 @@ class FirebaseChatService {
         );
   }
 
-  /// 🔹 Create Trio Room (student, parent, tutor)
   Future<bool> createTrioRoom(RoomEntity room) async {
     final hasTutor = room.members.any((m) => m['role'] == 'tutor');
     final hasParent = room.members.any((m) => m['role'] == 'parent');

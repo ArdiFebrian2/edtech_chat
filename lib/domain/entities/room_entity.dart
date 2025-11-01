@@ -1,13 +1,12 @@
-// TODO Implement this library.
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RoomEntity {
   final String id;
-  final String type; // "trio" | "group" | "private"
-  final List<Map<String, dynamic>> members; 
-  // members entry example: { "id": "uid123", "role": "student", "name": "Budi" }
-  final List<String> memberIds; // convenience list for queries
+  final String type;
+  final List<Map<String, dynamic>> members;
+  final List<String> memberIds;
   final DateTime createdAt;
+  final String createdBy; 
 
   RoomEntity({
     required this.id,
@@ -15,6 +14,7 @@ class RoomEntity {
     required this.members,
     required this.memberIds,
     required this.createdAt,
+    required this.createdBy, 
   });
 
   factory RoomEntity.fromMap(String id, Map<String, dynamic> map) {
@@ -34,6 +34,7 @@ class RoomEntity {
           : (map['createdAt'] != null
               ? DateTime.tryParse(map['createdAt'].toString()) ?? DateTime.now()
               : DateTime.now()),
+      createdBy: map['createdBy'] ?? '', 
     );
   }
 
@@ -43,6 +44,7 @@ class RoomEntity {
       'members': members,
       'memberIds': memberIds,
       'createdAt': createdAt,
+      'createdBy': createdBy, 
     };
   }
 }

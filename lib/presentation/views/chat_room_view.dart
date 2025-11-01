@@ -72,11 +72,7 @@ class ChatRoomView extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.chat_bubble_outline,
-                  size: 80,
-                  color: Colors.grey[300],
-                ),
+                Image.asset('assets/images/chatroom.png'),
                 const SizedBox(height: 16),
                 Text(
                   'No messages yet',
@@ -96,33 +92,33 @@ class ChatRoomView extends StatelessWidget {
           );
         }
         return DashChat(
-  currentUser: ChatUser(
-    id: controller.currentUserId,
- firstName: controller.currentUserName.value,
-
-  ),
-  messages: controller.messages
-      .map(
-        (m) => ChatMessage(
-          text: m.text,
-          user: ChatUser(
-            id: m.authorId,
-            firstName: m.authorName, // 🔹 tampilkan nama pengirim
+          currentUser: ChatUser(
+            id: controller.currentUserId,
+            firstName: controller.currentUserName.value,
           ),
-          createdAt: m.createdAt,
-        ),
-      )
-      .toList()
-      .reversed
-      .toList(),
-  onSend: (ChatMessage message) async {
-    if (message.text.trim().isEmpty) return;
+          messages: controller.messages
+              .map(
+                (m) => ChatMessage(
+                  text: m.text,
+                  user: ChatUser(
+                    id: m.authorId,
+                    firstName: m.authorName, // 🔹 tampilkan nama pengirim
+                  ),
+                  createdAt: m.createdAt,
+                ),
+              )
+              .toList()
+              .reversed
+              .toList(),
+          onSend: (ChatMessage message) async {
+            if (message.text.trim().isEmpty) return;
 
-    await controller.sendMessage(
-      roomId,
-      controller.currentUserId,
-      message.text,
-      controller.currentUserName.value,);
+            await controller.sendMessage(
+              roomId,
+              controller.currentUserId,
+              message.text,
+              controller.currentUserName.value,
+            );
           },
           messageOptions: MessageOptions(
             currentUserContainerColor: ColorTheme.primary,

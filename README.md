@@ -1,16 +1,42 @@
-# edtech_chat
+# 🧩 EdTech Chat
 
-A new Flutter project.
+A **Flutter-based educational chat application** that connects students, tutors, and parents in one collaborative platform.  
+Built with **Firebase** and **GetX** for authentication, chat management, and real-time data updates.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 🎬 Demo Video
 
-A few resources to get you started if this is your first Flutter project:
+> 🎥 **Watch the demo here:**  
+> [![Watch Demo](https://drive.google.com/file/d/15Zr9vh89Yw7YBSBrY99m80bFSTRb7jgU/view?usp=sharing)]
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🚀 Features
+
+- 🔐 **Authentication System**  
+  Register & login using Firebase Authentication.
+
+- 💬 **Real-Time Chat**  
+  Send and receive messages instantly with Cloud Firestore.
+
+- 🧑‍🏫 **Role-Based Access**  
+  Different roles with unique functionalities:
+  - **Student:** Join classes and communicate with tutors.  
+  - **Tutor:** Guide and support students in learning.  
+  - **Parent:** Track and monitor child’s academic progress.
+
+- 📱 **Modern UI**  
+  Clean, responsive interface built with GetX and Google Fonts.
+
+
+## 🛠️ Tech Stack
+
+| Category | Technology |
+|-----------|-------------|
+| Framework | Flutter |
+| State Management | GetX |
+| Backend | Firebase Auth, Firestore, Storage |
+| Chat UI | flutter_chat_ui |
+| Fonts | Google Fonts (Poppins) |
+
+

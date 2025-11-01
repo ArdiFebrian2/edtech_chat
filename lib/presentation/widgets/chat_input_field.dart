@@ -1,5 +1,6 @@
 // TODO Implement this library.
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:edtech_chat/core/constants/color_theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../controllers/chat_controller.dart';
@@ -63,7 +64,8 @@ class _ChatInputFieldState extends State<ChatInputField> {
             .get();
         final userData = userDoc.data() ?? {};
 
-        final userName = userData['name'] ??
+        final userName =
+            userData['name'] ??
             userData['nama'] ??
             user.displayName ??
             'Unknown';
@@ -110,21 +112,6 @@ class _ChatInputFieldState extends State<ChatInputField> {
         child: Row(
           children: [
             // Attachment button (optional)
-            IconButton(
-              icon: Icon(
-                Icons.add_circle_outline,
-                color: Colors.grey[600],
-              ),
-              onPressed: () {
-                // Implement attachment functionality
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Attachment feature coming soon'),
-                    duration: Duration(seconds: 1),
-                  ),
-                );
-              },
-            ),
             const SizedBox(width: 4),
 
             // Text input field
@@ -156,7 +143,7 @@ class _ChatInputFieldState extends State<ChatInputField> {
             // Send button
             Container(
               decoration: BoxDecoration(
-                color: _isTyping ? Colors.green[600] : Colors.grey[300],
+                color: _isTyping ? ColorTheme.primary : Colors.grey[300],
                 shape: BoxShape.circle,
               ),
               child: IconButton(
@@ -166,8 +153,9 @@ class _ChatInputFieldState extends State<ChatInputField> {
                         height: 20,
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.white),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Colors.white,
+                          ),
                         ),
                       )
                     : const Icon(Icons.send, size: 20),

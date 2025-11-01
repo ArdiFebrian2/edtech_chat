@@ -6,7 +6,6 @@ import '../../domain/entities/message_entity.dart';
 class LocalIsarService {
   static Isar? _isar;
 
-  /// 🔹 Initialize Isar (call once in main)
   static Future<void> init() async {
     if (_isar != null && _isar!.isOpen) return;
     final dir = await getApplicationDocumentsDirectory();
@@ -24,7 +23,6 @@ class LocalIsarService {
     return _isar!;
   }
 
-  /// 🔹 Cache messages locally (convert from domain to model)
   Future<void> cacheMessages(List<MessageEntity> entities) async {
     final models = entities.map((e) => MessageModel.fromEntity(e)).toList();
 
@@ -33,7 +31,6 @@ class LocalIsarService {
     });
   }
 
-  /// 🔹 Get cached messages (convert model → entity)
   Future<List<MessageEntity>> getCachedMessages(String roomId) async {
     final results = await isar.messageModels
         .filter()
@@ -45,7 +42,6 @@ class LocalIsarService {
     return results.map((m) => m.toEntity()).toList();
   }
 
-  /// 🔹 Clear local cache
   Future<void> clearCache() async {
     await isar.writeTxn(() async {
       await isar.messageModels.clear();

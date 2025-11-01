@@ -1,4 +1,4 @@
-import 'package:edtech_chat/core/constants/color_theme.dart' show ColorTheme;
+import 'package:edtech_chat/core/constants/color_theme.dart';
 import 'package:edtech_chat/presentation/widgets/chat_message_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,24 +7,50 @@ import '../widgets/chat_input_field.dart';
 import '../widgets/chat_action_buttons.dart';
 import '../widgets/empty_chat_state.dart';
 
-class ChatView extends StatelessWidget {
+class ChatView extends StatefulWidget {
   final String roomId;
-  ChatView({required this.roomId, super.key});
+  const ChatView({required this.roomId, super.key});
 
+  @override
+  State<ChatView> createState() => _ChatViewState();
+}
+
+class _ChatViewState extends State<ChatView> {
   final ChatController chatController = Get.put(ChatController());
   final messageController = TextEditingController();
   final ScrollController scrollController = ScrollController();
 
   @override
-  Widget build(BuildContext context) {
-    chatController.listenToMessages(roomId);
+  void initState() {
+    super.initState();
+    chatController.listenToMessages(widget.roomId);
+  }
 
+  @override
+  void dispose() {
+    messageController.dispose();
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToBottom() {
+    if (scrollController.hasClients) {
+      scrollController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
         title: const Text(
           "Chat Room",
-          style: TextStyle(fontWeight: FontWeight.w600),
+          style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white),
         ),
         backgroundColor: ColorTheme.primary,
       ),
@@ -61,25 +87,14 @@ class ChatView extends StatelessWidget {
             ),
 
             // Action Buttons
-            ChatActionButtons(roomId: roomId),
+            ChatActionButtons(roomId: widget.roomId),
 
             // Input Field
             ChatInputField(
-              roomId: roomId,
+              roomId: widget.roomId,
               messageController: messageController,
               chatController: chatController,
-              onMessageSent: () {
-                // Auto scroll to bottom after sending
-                Future.delayed(const Duration(milliseconds: 100), () {
-                  if (scrollController.hasClients) {
-                    scrollController.animateTo(
-                      0,
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeOut,
-                    );
-                  }
-                });
-              },
+              onMessageSent: _scrollToBottom,
             ),
           ],
         ),

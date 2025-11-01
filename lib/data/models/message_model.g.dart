@@ -95,24 +95,24 @@ int _messageModelEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
-  {
-    final value = object.authorPhoto;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
+  // {
+  //   final value = object.authorPhoto;
+  //   if (value != null) {
+  //     bytesCount += 3 + value.length * 3;
+  //   }
+  // }
   {
     final value = object.authorRole;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
     }
   }
-  {
-    final value = object.imageUrl;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
+  // {
+  //   final value = object.imageUrl;
+  //   if (value != null) {
+  //     bytesCount += 3 + value.length * 3;
+  //   }
+  // }
   bytesCount += 3 + object.messageId.length * 3;
   bytesCount += 3 + object.roomId.length * 3;
   bytesCount += 3 + object.text.length * 3;
@@ -128,10 +128,10 @@ void _messageModelSerialize(
 ) {
   writer.writeString(offsets[0], object.authorId);
   writer.writeString(offsets[1], object.authorName);
-  writer.writeString(offsets[2], object.authorPhoto);
+  // writer.writeString(offsets[2], object.authorPhoto);
   writer.writeString(offsets[3], object.authorRole);
   writer.writeDateTime(offsets[4], object.createdAt);
-  writer.writeString(offsets[5], object.imageUrl);
+  // writer.writeString(offsets[5], object.imageUrl);
   writer.writeString(offsets[6], object.messageId);
   writer.writeString(offsets[7], object.roomId);
   writer.writeString(offsets[8], object.text);
@@ -147,11 +147,11 @@ MessageModel _messageModelDeserialize(
   final object = MessageModel();
   object.authorId = reader.readString(offsets[0]);
   object.authorName = reader.readStringOrNull(offsets[1]);
-  object.authorPhoto = reader.readStringOrNull(offsets[2]);
+  // object.authorPhoto = reader.readStringOrNull(offsets[2]);
   object.authorRole = reader.readStringOrNull(offsets[3]);
   object.createdAt = reader.readDateTime(offsets[4]);
   object.id = id;
-  object.imageUrl = reader.readStringOrNull(offsets[5]);
+  // object.imageUrl = reader.readStringOrNull(offsets[5]);
   object.messageId = reader.readString(offsets[6]);
   object.roomId = reader.readString(offsets[7]);
   object.text = reader.readString(offsets[8]);
