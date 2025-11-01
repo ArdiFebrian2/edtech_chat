@@ -8,7 +8,7 @@ Built with **Firebase** and **GetX** for authentication, chat management, and re
 ## 🎬 Demo Video
 
 > 🎥 **Watch the demo here:**  
-> [![Watch Demo](https://drive.google.com/file/d/15Zr9vh89Yw7YBSBrY99m80bFSTRb7jgU/view?usp=sharing)]
+> [🎬 Watch Demo on Google Drive](https://drive.google.com/file/d/15Zr9vh89Yw7YBSBrY99m80bFSTRb7jgU/view?usp=sharing)
 
 
 ## 🚀 Features
